@@ -44,7 +44,6 @@ class Search extends React.Component {
             type="button"
             data-testid="search-artist-button"
             disabled={ isButtonDisable }
-            onClick={ this.onClick }
           >
             Pesquisar
           </button>
