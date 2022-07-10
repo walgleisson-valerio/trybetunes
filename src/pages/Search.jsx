@@ -11,6 +11,8 @@ class Search extends React.Component {
       isLoading: false,
       isButtonDisable: true,
       artist: '',
+      artistSearched: '',
+      results: [],
     };
   }
 
@@ -31,14 +33,26 @@ class Search extends React.Component {
   }
 
   searchAlbuns = async () => {
-    this.setState({ isLoading: true });
     const { artist } = this.state;
-    await searchAlbumsAPI(artist);
-    this.setState({ artist: '', isLoading: false });
+    this.setState(
+      {
+        isButtonDisable: true,
+        isLoading: true,
+        artistSearched: artist,
+        results: [],
+      },
+    );
+    const results = await searchAlbumsAPI(artist);
+    this.setState(
+      { artist: '',
+        isLoading: false,
+        results,
+      },
+    );
   }
 
   render() {
-    const { isButtonDisable, artist, isLoading } = this.state;
+    const { isButtonDisable, artist, isLoading, artistSearched, results } = this.state;
     return (
       <>
         <Header />
@@ -63,6 +77,22 @@ class Search extends React.Component {
             </section>
           )}
         </div>
+        <section>
+          <div>
+            {
+              artistSearched !== ''
+              && results.length !== 0
+                ? <h2>{ `Resultado de álbuns de: ${artistSearched}`}</h2>
+                : <h3>Nenhum álbum foi encontrado</h3>
+            }
+            <div>
+              { results.length !== 0
+              && results.map((result) => (
+                <p key={ result.collectionId }>{ result.collectionName }</p>
+              ))}
+            </div>
+          </div>
+        </section>
       </>
     );
   }
