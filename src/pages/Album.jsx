@@ -16,7 +16,7 @@ class Album extends React.Component {
   }
 
   async componentDidMount() {
-    const { match: { params: {id} } } = this.props;
+    const { match: { params: { id } } } = this.props;
     const musics = await getMusics(id);
     this.setState(
       { albums: [...musics.slice(1)],
