@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../Components/Header';
 import getMusics from '../services/musicsAPI';
+import MusicCard from '../Components/MusicCard';
 
 class Album extends React.Component {
   constructor() {
@@ -10,7 +11,7 @@ class Album extends React.Component {
     this.state = {
       albumName: '',
       artistName: '',
-      albums: '',
+      albums: [],
     };
   }
 
@@ -33,6 +34,15 @@ class Album extends React.Component {
         <div data-testid="page-album">
           <h2 data-testid="artist-name">{ artistName }</h2>
           <h2 data-testid="album-name">{ albumName }</h2>
+        </div>
+        <div>
+          {albums.map((album) => (
+            <MusicCard
+              key={ album.trackId }
+              trackName={ album.trackName }
+              previewUrl={ album.previewUrl }
+            />
+          ))}
         </div>
       </>
     );
