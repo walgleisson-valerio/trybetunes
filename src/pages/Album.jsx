@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Header from '../Components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../Components/MusicCard';
+import { addSong } from '../services/favoriteSongsAPI';
+import Loading from './Loading';
 
 class Album extends React.Component {
   constructor() {
@@ -11,7 +13,8 @@ class Album extends React.Component {
     this.state = {
       albumName: '',
       artistName: '',
-      albums: [],
+      isLoading: false,
+      album: [],
     };
   }
 
@@ -19,15 +22,21 @@ class Album extends React.Component {
     const { match: { params: { id } } } = this.props;
     const musics = await getMusics(id);
     this.setState(
-      { albums: [...musics.slice(1)],
+      { album: [...musics.slice(1)],
         artistName: musics[0].artistName,
         albumName: musics[0].collectionName,
       },
     );
   }
 
+  addToFavorites = async (music) => {
+    this.setState({ isLoading: true });
+    await addSong(music);
+    this.setState({ isLoading: false });
+  }
+
   render() {
-    const { albums, artistName, albumName } = this.state;
+    const { album, artistName, albumName, isLoading } = this.state;
     return (
       <>
         <Header />
@@ -36,11 +45,12 @@ class Album extends React.Component {
           <h2 data-testid="album-name">{ albumName }</h2>
         </div>
         <div>
-          {albums.map((album) => (
+          {isLoading && <Loading />}
+          {album.map((music) => (
             <MusicCard
-              key={ album.trackId }
-              trackName={ album.trackName }
-              previewUrl={ album.previewUrl }
+              key={ music.trackId }
+              music={ music }
+              addToFavorites={ this.addToFavorites }
             />
           ))}
         </div>
