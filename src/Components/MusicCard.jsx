@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class MusicCard extends React.Component {
   render() {
-    const { music, addToFavorites } = this.props;
+    const { music, addToFavorites, isFavorite } = this.props;
     const { trackName, trackId, previewUrl } = music;
     return (
       <div>
@@ -21,6 +21,7 @@ class MusicCard extends React.Component {
             type="checkbox"
             id="favorite"
             data-testid={ `checkbox-music-${trackId}` }
+            checked={ isFavorite }
             onClick={ () => addToFavorites(music) }
           />
         </label>
